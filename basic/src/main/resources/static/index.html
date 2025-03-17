@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Пример</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #messageInput {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket Пример</h1>
+<div id="messages"></div>
+<input type="text" id="messageInput" placeholder="Введите сообщение">
+<button id="sendMessage">Отправить сообщение</button>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageButton = document.getElementById('sendMessage');
+
+        const socket = new SockJS('/ws');
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/greetings', function (greeting) {
+                const message = JSON.parse(greeting.body).response;
+                const messageElement = document.createElement('div');
+                // Предположим, что сообщение хранится в свойстве `content`
+                messageElement.textContent = message.content || message; // Обрабатываем сообщение
+                messagesDiv.appendChild(messageElement);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Прокрутка вниз
+            });
+        });
+
+        stompClient.onclose = function() {
+            console.log('Соединение закрыто');
+        };
+
+        sendMessageButton.onclick = function() {
+            const message = messageInput.value;
+            if (message) {
+                console.log('Отправка сообщения: ' + message);
+                stompClient.send("/app/hello", {}, message);
+                messageInput.value = ''; // Очистка поля ввода
+            }
+        };
+    });
+</script>
+
+<!--<script>-->
+<!--    const messagesDiv = document.getElementById('messages');-->
+<!--    const messageInput = document.getElementById('messageInput');-->
+<!--    const sendMessageButton = document.getElementById('sendMessage');-->
+
+<!--    var socket = new SockJS('/ws');-->
+<!--    var stompClient = Stomp.over(socket);-->
+
+<!--    stompClient.connect({}, function (frame) {-->
+<!--        console.log('Connected1: ' + frame);-->
+<!--        stompClient.subscribe('/topic/greetings', function (greeting) {-->
+<!--            console.log(JSON.parse(greeting.body));-->
+<!--        });-->
+<!--    });-->
+
+<!--    stompClient.send = function(event) {-->
+<!--        console.log('stompClient.send: ');-->
+<!--        const message = event.data;-->
+<!--        const messageElement = document.createElement('div');-->
+<!--        messageElement.textContent = message;-->
+<!--        messagesDiv.appendChild(messageElement);-->
+<!--        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Прокрутка вниз-->
+<!--    };-->
+
+<!--    stompClient.onclose = function() {-->
+<!--        console.log('Соединение закрыто');-->
+<!--    };-->
+
+<!--    sendMessageButton.onclick = function() {-->
+<!--        console.log('Отправка сообщения: ' + messageInput.value);-->
+<!--        const message = messageInput.value;-->
+<!--        if (message) {-->
+<!--            stompClient.send("/app/hello", {}, message);-->
+<!--            messageInput.value = ''; // Очистка поля ввода-->
+<!--        }-->
+<!--    };-->
+<!--</script>-->
+</body>
+</html>
