@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Example</title>
+</head>
+<body>
+<h1>Events:</h1>
+<ul id="eventList"></ul>
+
+<script>
+    const eventSource = new EventSource('/events');
+
+    eventSource.onmessage = function(event) {
+        const list = document.getElementById('eventList');
+        const li = document.createElement('li');
+        li.textContent = event.data;
+        list.appendChild(li);
+    };
+</script>
+</body>
+</html>

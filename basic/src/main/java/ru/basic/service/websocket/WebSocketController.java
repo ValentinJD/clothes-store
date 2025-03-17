@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class WebSocketController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     private void sendChange() {
         log.info("Sending message");
         simpMessagingTemplate.convertAndSend("/topic/greetings", "{ \"response\": \"Hello, " + "UPDATE" + "!\"}");
@@ -31,7 +32,7 @@ public class WebSocketController {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public String greeting(SimpMessageHeaderAccessor headers, String body) throws Exception {
+    public Mono<String> greeting(SimpMessageHeaderAccessor headers, String body) throws Exception {
         // Получаем команду
         String command = headers.getMessageType().toString();
 
@@ -45,7 +46,7 @@ public class WebSocketController {
         System.out.println("Body: " + body);
         // Обработка сообщения, можно добавить задержку для имитации обработки
         Thread.sleep(1000);
-        return "{ \"response\": \"Hello, " + body + "!\"}";
+        return Mono.just("{ \"response\": \"Hello, " + body + "!\"}");
     }
 
 
