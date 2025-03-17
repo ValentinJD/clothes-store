@@ -63,42 +63,5 @@
     });
 </script>
 
-<!--<script>-->
-<!--    const messagesDiv = document.getElementById('messages');-->
-<!--    const messageInput = document.getElementById('messageInput');-->
-<!--    const sendMessageButton = document.getElementById('sendMessage');-->
-
-<!--    var socket = new SockJS('/ws');-->
-<!--    var stompClient = Stomp.over(socket);-->
-
-<!--    stompClient.connect({}, function (frame) {-->
-<!--        console.log('Connected1: ' + frame);-->
-<!--        stompClient.subscribe('/topic/greetings', function (greeting) {-->
-<!--            console.log(JSON.parse(greeting.body));-->
-<!--        });-->
-<!--    });-->
-
-<!--    stompClient.send = function(event) {-->
-<!--        console.log('stompClient.send: ');-->
-<!--        const message = event.data;-->
-<!--        const messageElement = document.createElement('div');-->
-<!--        messageElement.textContent = message;-->
-<!--        messagesDiv.appendChild(messageElement);-->
-<!--        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Прокрутка вниз-->
-<!--    };-->
-
-<!--    stompClient.onclose = function() {-->
-<!--        console.log('Соединение закрыто');-->
-<!--    };-->
-
-<!--    sendMessageButton.onclick = function() {-->
-<!--        console.log('Отправка сообщения: ' + messageInput.value);-->
-<!--        const message = messageInput.value;-->
-<!--        if (message) {-->
-<!--            stompClient.send("/app/hello", {}, message);-->
-<!--            messageInput.value = ''; // Очистка поля ввода-->
-<!--        }-->
-<!--    };-->
-<!--</script>-->
 </body>
 </html>
