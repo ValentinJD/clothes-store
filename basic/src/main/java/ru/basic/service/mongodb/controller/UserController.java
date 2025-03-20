@@ -24,16 +24,13 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public Flux<Iterable<User>> allUsers() {
-        Iterable<User> allUsers = userService.getAllUsers();
-        return Flux.just(allUsers);
+    public Flux<User> allUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping()
     public Mono<User> getById(@RequestParam("id") String id) {
-        Optional<User> userById = userService.getUserById(id);
-        return Mono.justOrEmpty(userById)
-                .defaultIfEmpty(new User("user", "user"));
+        return userService.getUserById(id);
     }
 
     @DeleteMapping()

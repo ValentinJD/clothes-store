@@ -2,6 +2,8 @@ package ru.basic.service.mongodb.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.basic.service.mongodb.model.User;
 import ru.basic.service.mongodb.repository.UserRepository;
 
@@ -17,11 +19,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Iterable<User> getAllUsers() {
+    public Flux<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(String id) {
+    public Mono<User> getUserById(String id) {
         return userRepository.findById(id);
     }
 
