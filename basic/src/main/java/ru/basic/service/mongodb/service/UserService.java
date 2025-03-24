@@ -1,19 +1,17 @@
 package ru.basic.service.mongodb.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.basic.service.mongodb.model.User;
 import ru.basic.service.mongodb.repository.UserRepository;
 
-import java.util.Optional;
-
+@AllArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void save(User user) {
         userRepository.save(user);
@@ -31,3 +29,5 @@ public class UserService {
         userRepository.deleteById(id);
     }
 }
+
+
