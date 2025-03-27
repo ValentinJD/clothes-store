@@ -7,7 +7,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
 
@@ -16,11 +15,11 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-public class WebSocketController {
+public class WebSocketStompController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @Scheduled(fixedRate = 10000)
+//    @Scheduled(fixedRate = 10000)
     private void sendChange() {
         log.info("Sending message");
         simpMessagingTemplate.convertAndSend("/topic/greetings", "{ \"response\": \"Hello, " + "UPDATE" + "!\"}");
